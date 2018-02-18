@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+<h:body>
+
+    <ui:composition template="/template/common/commonLayout.xhtml">
+        <ui:define name="content">
+            <h:form enctype="multipart/form-data" id="form">
+                <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+
+                <p:panel header="Buscar Radicados" visible="#{tramitarBean.verBusqueda}">
+                    <p:panelGrid columns="4" >
+                        <p:outputLabel value="Fecha Inicio:"  />
+                        <p:calendar  value="#{tramitarBean.fechaInicio}" showOn="button" pattern="dd-MM-yyyy" locale="es"/>
+                        <p:outputLabel value="Fecha Fin:"  />
+                        <p:calendar  value="#{tramitarBean.fechaFin}" showOn="button" pattern="dd-MM-yyyy" locale="es"/>
+                        <p:commandButton value="Buscar" action="#{tramitarBean.buscarRadicados}" ajax="false" />
+                    </p:panelGrid>
+                </p:panel>
+                <!--style="min-width:400px;min-height:200px;"-->
+                    <p:layout >
+                        <p:layoutUnit position="west" resizable="true" size="40%" visible="#{tramitarBean.verResultados}">
+                            <p:dataList value="#{tramitarBean.radicadosLista}" var="radicado" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                                <f:facet name="header">
+                                    Radicados
+                                </f:facet>
+                                <p:commandLink update=":form:detalleRadicado" title="Ver Detalle" styleClass="ui-icon ui-icon-search" style="float:left;margin-right:10px">
+                                    <f:setPropertyActionListener value="#{radicado}" target="#{tramitarBean.radicadoSeleccionado}" />
+                                    <h:outputText value="#{radicado.numero}, #{radicado.estado}" />
+                                </p:commandLink>
+                                <h:outputText value="#{radicado.numero}, #{radicado.estado}" style="display:inline-block"/>
+                            </p:dataList>
+                        </p:layoutUnit>
+
+                        <p:layoutUnit position="center" visible="#{tramitarBean.verResultados}">
+                            <p:panelGrid columns="2" id="detalleRadicado" style="width: 100%">
+                                <p:outputLabel value="Número de Radicado:"  />
+                                <p:inputText value="#{tramitarBean.radicadoSeleccionado.numero}" disabled="true"/>
+                                <p:outputLabel value="Estado:"  />
+                                <p:inputText value="#{tramitarBean.radicadoSeleccionado.estado}"  disabled="true"/>
+                                <p:outputLabel value="Acciones:"  />
+                                <p:outputLabel  />
+                                <p:outputLabel value="Accion:"  />
+                                <p:commandButton value="Asignar Estado"  ajax="false" />
+                                <p:outputLabel value="Observaciones:"  />
+                                <p:inputTextarea  />
+                            </p:panelGrid>
+                        </p:layoutUnit>
+
+                    </p:layout>
+
+
+
+            </h:form>
+
+        </ui:define>
+
+
+    </ui:composition>
+
+</h:body>
+
+</html>
